@@ -11,12 +11,14 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SeekBar timerSeekBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final SeekBar timerSeekBar = findViewById(R.id.timerSeekBar);
+        timerSeekBar = findViewById(R.id.timerSeekBar);
         final TextView timerTextView = findViewById(R.id.timerText);
 
         timerSeekBar.setMax(720);
