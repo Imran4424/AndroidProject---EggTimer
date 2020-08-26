@@ -2,10 +2,10 @@ package com.luminous.android.eggtimer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SeekBar timerSeekBar;
     private TextView timerTextView;
-    private Boolean counterIsActive = false;
+    private boolean counterIsActive = false;
     private CountDownTimer countDownTimer;
 
     @Override
@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 updateTimerUI(i);
+//                Log.d("seekbar", "onProgressChanged: pressed");
             }
 
             @Override
@@ -68,19 +69,20 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setText(minutesString + ":" + secondsString);
     }
 
-    public void goClicked(final View view) {
+    public void goClicked(View view) {
+//        Log.d("gotClicked", "cliked" + counterIsActive);
 
         if (counterIsActive) {
             ((Button)view).setText("GO!");
-            updateTimerControl(30, true);
+            updateTimerControl();
         } else {
-            
+            ((Button)view).setText("STOP");
             int miliSeconds =  (timerSeekBar.getProgress() * 1000) + 100; // 100 is for fixing rounding errors
+            switchStatus(false);
 
             countDownTimer = new CountDownTimer( miliSeconds, 1000) {
                 @Override
                 public void onTick(long remainingSeconds) {
-                    view.setEnabled(false);
                     updateTimerUI((int) remainingSeconds / 1000);
                 }
 
@@ -88,17 +90,23 @@ public class MainActivity extends AppCompatActivity {
                 public void onFinish() {
                     MediaPlayer bellSoundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.bell);
                     bellSoundPlayer.start();
-                    view.setEnabled(true);
+                    updateTimerControl();
                 }
             }.start();
         }
     }
 
-    private void updateTimerControl(int seconds, Boolean status) {
-        timerSeekBar.setProgress(seconds);
-        updateTimerUI(seconds);
-        timerSeekBar.setEnabled(status);
-        counterIsActive = status;
+    private void updateTimerControl() {
+        timerSeekBar.setProgress(30);
+        updateTimerUI(30);
+        switchStatus(true);
         countDownTimer.cancel();
+    }
+
+    private void switchStatus(Boolean status) {
+        timerSeekBar.setEnabled(status);
+        counterIsActive = !status;
+
+//        Log.d("Counter Status", Boolean.toString(counterIsActive));
     }
 }
