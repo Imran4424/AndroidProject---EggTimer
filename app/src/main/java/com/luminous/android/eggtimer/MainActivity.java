@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private SeekBar timerSeekBar;
+    private TextView timerTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         timerSeekBar = findViewById(R.id.timerSeekBar);
-        final TextView timerTextView = findViewById(R.id.timerText);
+        timerTextView = findViewById(R.id.timerText);
 
         timerSeekBar.setMax(720);
         timerSeekBar.setProgress(30);
