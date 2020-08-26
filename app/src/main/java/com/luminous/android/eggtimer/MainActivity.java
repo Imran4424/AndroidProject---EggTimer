@@ -3,7 +3,7 @@ package com.luminous.android.eggtimer;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SeekBar timerSeekBar;
     private TextView timerTextView;
+    private Boolean counterIsActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,27 +28,9 @@ public class MainActivity extends AppCompatActivity {
         timerSeekBar.setProgress(30);
 
         timerSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                int minutes = i / 60;
-                int seconds = i - (minutes * 60);
-                String minutesString;
-                String secondsString;
-
-                if (0 == seconds) {
-                    secondsString = seconds + "0";
-                } else {
-                    secondsString = Integer.toString(seconds);
-                }
-
-                if (minutes < 10) {
-                    minutesString = "0" + minutes;
-                } else {
-                    minutesString = Integer.toString(minutes);
-                }
-
-                timerTextView.setText(minutesString + ":" + secondsString);
+                updateTimerUI(i);
             }
 
             @Override
@@ -62,18 +45,42 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void goClicked(View view) {
-        int miliSeconds =  (timerSeekBar.getProgress() * 1000) / 60;
+    private void updateTimerUI(int secondsLeft) {
+        int minutes = secondsLeft / 60;
+        int seconds = secondsLeft - (minutes * 60);
+        String minutesString;
+        String secondsString;
+
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = Integer.toString(seconds);
+        }
+
+        if (minutes < 10) {
+            minutesString = "0" + minutes;
+        } else {
+            minutesString = Integer.toString(minutes);
+        }
+
+        timerTextView.setText(minutesString + ":" + secondsString);
+    }
+
+    public void goClicked(final View view) {
+        int miliSeconds =  (timerSeekBar.getProgress() * 1000) + 100; // 100 is for fixing rounding errors
 
         new CountDownTimer( miliSeconds, 1000) {
             @Override
-            public void onTick(long l) {
-
+            public void onTick(long remainingSeconds) {
+                view.setEnabled(false);
+                updateTimerUI((int) remainingSeconds / 1000);
             }
 
             @Override
             public void onFinish() {
-
+                MediaPlayer bellSoundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.bell);
+                bellSoundPlayer.start();
+                view.setEnabled(true);
             }
         }.start();
     }
