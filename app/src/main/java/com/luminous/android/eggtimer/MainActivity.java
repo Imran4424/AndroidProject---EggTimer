@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -67,6 +68,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goClicked(final View view) {
+
+        if (counterIsActive) {
+            ((Button)view).setText("GO!");
+            timerSeekBar.setProgress(30);
+            updateTimerUI(30);
+            timerSeekBar.setEnabled(true);
+        }
+
+
         int miliSeconds =  (timerSeekBar.getProgress() * 1000) + 100; // 100 is for fixing rounding errors
 
         new CountDownTimer( miliSeconds, 1000) {
