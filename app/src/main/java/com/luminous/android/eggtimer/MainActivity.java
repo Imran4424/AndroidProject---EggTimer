@@ -36,7 +36,13 @@ public class MainActivity extends AppCompatActivity {
                     secondsString = Integer.toString(seconds);
                 }
 
-                timerTextView.setText(minutes + ":" + secondsString);
+                if (minutes < 10) {
+                    minutesString = "0" + minutes;
+                } else {
+                    minutesString = Integer.toString(minutes);
+                }
+
+                timerTextView.setText(minutesString + ":" + secondsString);
             }
 
             @Override
