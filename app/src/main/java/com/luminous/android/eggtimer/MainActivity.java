@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
 
         }
-        
     }
 
     private void updateTimerControl(int seconds, Boolean status) {
