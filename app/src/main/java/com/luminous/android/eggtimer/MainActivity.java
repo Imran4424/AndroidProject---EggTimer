@@ -59,6 +59,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goClicked(View view) {
-        
+
     }
 }
