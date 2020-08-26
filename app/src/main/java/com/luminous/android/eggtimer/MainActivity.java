@@ -69,14 +69,14 @@ public class MainActivity extends AppCompatActivity {
         timerTextView.setText(minutesString + ":" + secondsString);
     }
 
-    public void goClicked(final View view) {
+    public void goClicked(View view) {
 //        Log.d("gotClicked", "cliked" + counterIsActive);
+        final Button clickedButton = (Button) view;
 
         if (counterIsActive) {
-            ((Button)view).setText("GO!");
-            updateTimerControl((Button) view);
+            updateTimerControl(clickedButton);
         } else {
-            ((Button)view).setText("STOP");
+            clickedButton.setText("STOP");
             int miliSeconds =  (timerSeekBar.getProgress() * 1000) + 100; // 100 is for fixing rounding errors
             switchStatus(false);
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFinish() {
                     MediaPlayer bellSoundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.bell);
                     bellSoundPlayer.start();
-                    updateTimerControl((Button) view);
+                    updateTimerControl(clickedButton);
                 }
             }.start();
         }
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateTimerControl(Button button) {
         int defaultTime = 30;
 
+        button.setText("GO!");
         timerSeekBar.setProgress(defaultTime);
         updateTimerUI(defaultTime);
         switchStatus(true);
