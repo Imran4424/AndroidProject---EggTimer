@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar timerSeekBar;
     private TextView timerTextView;
     private Boolean counterIsActive = false;
+    private CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,27 +72,20 @@ public class MainActivity extends AppCompatActivity {
 
         if (counterIsActive) {
             ((Button)view).setText("GO!");
-            timerSeekBar.setProgress(30);
-            updateTimerUI(30);
-            timerSeekBar.setEnabled(true);
+            updateTimerControl(30, true);
+        } else {
+
         }
 
 
-        int miliSeconds =  (timerSeekBar.getProgress() * 1000) + 100; // 100 is for fixing rounding errors
+        
+    }
 
-        new CountDownTimer( miliSeconds, 1000) {
-            @Override
-            public void onTick(long remainingSeconds) {
-                view.setEnabled(false);
-                updateTimerUI((int) remainingSeconds / 1000);
-            }
-
-            @Override
-            public void onFinish() {
-                MediaPlayer bellSoundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.bell);
-                bellSoundPlayer.start();
-                view.setEnabled(true);
-            }
-        }.start();
+    private void updateTimerControl(int seconds, Boolean status) {
+        timerSeekBar.setProgress(seconds);
+        updateTimerUI(seconds);
+        timerSeekBar.setEnabled(status);
+        counterIsActive = status;
+        countDownTimer.cancel();
     }
 }
