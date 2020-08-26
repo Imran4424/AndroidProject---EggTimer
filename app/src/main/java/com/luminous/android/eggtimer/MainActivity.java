@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             ((Button)view).setText("GO!");
             updateTimerControl(30, true);
         } else {
+            
             int miliSeconds =  (timerSeekBar.getProgress() * 1000) + 100; // 100 is for fixing rounding errors
 
             countDownTimer = new CountDownTimer( miliSeconds, 1000) {
